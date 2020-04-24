@@ -30,7 +30,7 @@ export class UsersCtrl {
           delete users[i].password;
         }
       }
-      return users;
+      return { success: true, data: users };
     } catch (error) {
       return { error };
     }
