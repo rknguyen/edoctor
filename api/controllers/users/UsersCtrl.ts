@@ -115,7 +115,7 @@ export class UserCtrl {
   @UseAuth(AuthCheck)
   async updateUserAvailableTime(
     @Req() request: any,
-    @Required() @BodyParams('availableTimeBlock') availableTimeBlock: number[]
+    @Required() @BodyParams('availableTimeBlock') availableTimeBlock: number[][]
   ) {
     try {
       const user = await UserModel.findByIdAndUpdate(request.user.id, {
