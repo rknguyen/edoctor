@@ -32,7 +32,7 @@ export class BookingsCtrl {
 
 @Controller('/booking')
 @MergeParams(true)
-export class TypeCtrl {
+export class BookingCtrl {
   @Get('/me')
   @UseAuth(AuthCheck)
   async findBookingIdByUser(@Req() request: any) {

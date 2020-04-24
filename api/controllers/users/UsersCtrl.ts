@@ -17,7 +17,6 @@ import { AuthCheck } from '../../middlewares/Guards';
 import { Groups } from '../../models/group';
 
 @Controller('/users')
-@UseAuth(AuthCheck)
 @MergeParams(true)
 export class UsersCtrl {
   @Get('/')
@@ -28,6 +27,7 @@ export class UsersCtrl {
         users[i] = users[i].toObject();
         if (users[i].groupId) {
           (users[i] as any).group = await Groups.findGroupById(users[i].groupId);
+          delete users[i].password;
         }
       }
       return users;
@@ -49,6 +49,7 @@ export class UserCtrl {
         if (user.groupId) {
           (user as any).group = await Groups.findGroupById(user.groupId);
         }
+        delete user.password;
         return { success: true, data: user };
       } else {
         return { error: Error.USER_NOT_FOUND };
@@ -59,7 +60,6 @@ export class UserCtrl {
   }
 
   @Get('/:id')
-  @UseAuth(AuthCheck)
   async findUserById(@Req() req: any, @Required() @PathParams('id') userId: string) {
     try {
       let user: IUserModel | null = await Users.findUserById(userId);
@@ -68,6 +68,7 @@ export class UserCtrl {
         if (user.groupId) {
           (user as any).group = await Groups.findGroupById(user.groupId);
         }
+        delete user.password;
         return { success: true, data: user };
       } else {
         return { error: Error.USER_NOT_FOUND };

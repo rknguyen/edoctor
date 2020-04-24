@@ -9,7 +9,7 @@ const rootDir = __dirname;
   rootDir,
   swagger: [
     {
-      path: '/api-docs',
+      path: '/docs',
     },
   ],
   acceptMimes: ['application/json'],
