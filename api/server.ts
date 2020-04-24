@@ -1,17 +1,11 @@
 import { GlobalAcceptMimesMiddleware, ServerLoader, ServerSettings } from '@tsed/common';
 import * as bodyParser from 'body-parser';
 import cors from 'cors';
-import '@tsed/swagger';
 
 const rootDir = __dirname;
 
 @ServerSettings({
   rootDir,
-  swagger: [
-    {
-      path: '/docs',
-    },
-  ],
   acceptMimes: ['application/json'],
   httpPort: process.env.PORT || 8081,
   httpsPort: false,

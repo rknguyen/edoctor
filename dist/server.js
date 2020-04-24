@@ -22,7 +22,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@tsed/common");
 const bodyParser = __importStar(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
-require("@tsed/swagger");
 const rootDir = __dirname;
 let Server = class Server extends common_1.ServerLoader {
     constructor(settings) {
@@ -38,11 +37,6 @@ let Server = class Server extends common_1.ServerLoader {
 Server = __decorate([
     common_1.ServerSettings({
         rootDir,
-        swagger: [
-            {
-                path: '/docs',
-            },
-        ],
         acceptMimes: ['application/json'],
         httpPort: process.env.PORT || 8081,
         httpsPort: false,
