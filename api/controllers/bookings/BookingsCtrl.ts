@@ -75,7 +75,8 @@ export class BookingCtrl {
     @Required() @BodyParams('doctorId') doctorId: string,
     @Required() @BodyParams('bookingDateTimestamp') bookingDateTimestamp: number,
     @Required() @BodyParams('startBlockTimeIndex') startBlockTimeIndex: number,
-    @Required() @BodyParams('endBlockTimeIndex') endBlockTimeIndex: number
+    @Required() @BodyParams('endBlockTimeIndex') endBlockTimeIndex: number,
+    @BodyParams('attachments') attachments: string[]
   ) {
     try {
       if (!isTimeBlockIndexValid(startBlockTimeIndex) || !isTimeBlockIndexValid(endBlockTimeIndex)) {
@@ -138,6 +139,7 @@ export class BookingCtrl {
                 startBlockTimeIndex,
                 endBlockTimeIndex,
                 zoomMeetingId: meeting.id,
+                attachments,
               });
               return { success: true, data: booking };
             }

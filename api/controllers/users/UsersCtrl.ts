@@ -131,6 +131,19 @@ export class UserCtrl {
     }
   }
 
+  @Patch('/me/avatar')
+  @UseAuth(AuthCheck)
+  async updateUserAvatar(@Req() request: any, @Required() @BodyParams('avatarUrl') avatarUrl: string) {
+    try {
+      const user = await UserModel.findByIdAndUpdate(request.user.id, {
+        avatar: avatarUrl,
+      });
+      return { success: true, data: user };
+    } catch (error) {
+      return { error };
+    }
+  }
+
   @Patch('/me/available-time')
   @UseAuth(AuthCheck)
   async updateUserAvailableTime(

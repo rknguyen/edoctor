@@ -76,6 +76,11 @@ const BookingSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    attachments: {
+        type: [String],
+        required: false,
+        default: [],
+    },
     createdAt: {
         type: Number,
         required: false,

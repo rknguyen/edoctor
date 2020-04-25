@@ -76,7 +76,7 @@ let BookingCtrl = class BookingCtrl {
                 .catch((error) => ({ error }));
         });
     }
-    createNewBooking(name, description, symptom, gender, dob, address, phoneNumber, passportNumber, healthCareId, doctorId, bookingDateTimestamp, startBlockTimeIndex, endBlockTimeIndex) {
+    createNewBooking(name, description, symptom, gender, dob, address, phoneNumber, passportNumber, healthCareId, doctorId, bookingDateTimestamp, startBlockTimeIndex, endBlockTimeIndex, attachments) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 if (!blockTime_1.isTimeBlockIndexValid(startBlockTimeIndex) || !blockTime_1.isTimeBlockIndexValid(endBlockTimeIndex)) {
@@ -131,6 +131,7 @@ let BookingCtrl = class BookingCtrl {
                                     startBlockTimeIndex,
                                     endBlockTimeIndex,
                                     zoomMeetingId: meeting.id,
+                                    attachments,
                                 });
                                 return { success: true, data: booking };
                             }
@@ -202,8 +203,9 @@ __decorate([
     __param(10, common_1.Required()), __param(10, common_1.BodyParams('bookingDateTimestamp')),
     __param(11, common_1.Required()), __param(11, common_1.BodyParams('startBlockTimeIndex')),
     __param(12, common_1.Required()), __param(12, common_1.BodyParams('endBlockTimeIndex')),
+    __param(13, common_1.BodyParams('attachments')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, Array, String, String, String, String, String, String, String, Number, Number, Number]),
+    __metadata("design:paramtypes", [String, String, Array, String, String, String, String, String, String, String, Number, Number, Number, Array]),
     __metadata("design:returntype", Promise)
 ], BookingCtrl.prototype, "createNewBooking", null);
 __decorate([

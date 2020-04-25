@@ -21,6 +21,7 @@ export interface IBookingModel extends mongoose.Document {
   zoomMeetingId: number;
   rating: number;
   description: string;
+  attachments: string[];
   createdAt: number;
   modifiedAt: number;
 }
@@ -92,6 +93,11 @@ const BookingSchema = new mongoose.Schema({
   description: {
     type: String,
     required: false,
+  },
+  attachments: {
+    type: [String],
+    required: false,
+    default: [],
   },
   createdAt: {
     type: Number,

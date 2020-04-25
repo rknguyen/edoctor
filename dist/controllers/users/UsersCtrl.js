@@ -150,6 +150,19 @@ let UserCtrl = class UserCtrl {
             }
         });
     }
+    updateUserAvatar(request, avatarUrl) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield user_1.UserModel.findByIdAndUpdate(request.user.id, {
+                    avatar: avatarUrl,
+                });
+                return { success: true, data: user };
+            }
+            catch (error) {
+                return { error };
+            }
+        });
+    }
     updateUserAvailableTime(request, availableTimeBlock) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -238,6 +251,14 @@ __decorate([
     __metadata("design:paramtypes", [String, String, String, String, String, String, String]),
     __metadata("design:returntype", Promise)
 ], UserCtrl.prototype, "createNewUser", null);
+__decorate([
+    common_1.Patch('/me/avatar'),
+    common_1.UseAuth(Guards_1.AuthCheck),
+    __param(0, common_1.Req()), __param(1, common_1.Required()), __param(1, common_1.BodyParams('avatarUrl')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], UserCtrl.prototype, "updateUserAvatar", null);
 __decorate([
     common_1.Patch('/me/available-time'),
     common_1.UseAuth(Guards_1.AuthCheck),

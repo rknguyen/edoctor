@@ -15,6 +15,7 @@
     "@types/node": "^13.7.2",
     "@types/swagger-schema-official": "^2.0.20",
     "@types/uuidv4": "^5.0.0",
+    "aws-sdk": "^2.663.0",
     "axios": "^0.19.2",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
