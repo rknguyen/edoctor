@@ -52,6 +52,15 @@ export class BookingCtrl {
       .catch((error) => ({ error }));
   }
 
+  @Get('/phone/:phoneNumber')
+  async findBookingByPhoneNumber(@Required() @PathParams('phoneNumber') phoneNumber: string) {
+    return BookingModel.findOne({ phoneNumber })
+      .then((booking: IBookingModel | null) =>
+        !!booking ? { data: booking } : { error: Error.BOOKING_NOT_FOUND }
+      )
+      .catch((error) => ({ error }));
+  }
+
   @Post('/new')
   async createNewBooking(
     @Required() @BodyParams('name') name: string,
