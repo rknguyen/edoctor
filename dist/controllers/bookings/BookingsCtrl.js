@@ -107,9 +107,20 @@ let BookingCtrl = class BookingCtrl {
     }
     findBookingByPhoneNumber(phoneNumber) {
         return __awaiter(this, void 0, void 0, function* () {
-            return booking_1.BookingModel.find({ phoneNumber })
-                .then((booking) => !!booking ? { data: booking } : { error: BookingsCtrl_Erro_1.default.BOOKING_NOT_FOUND })
-                .catch((error) => ({ error }));
+            try {
+                const bookings = yield booking_1.BookingModel.find({ phoneNumber });
+                for (let i = 0; i < bookings.length; ++i) {
+                    bookings[i] = bookings[i].toObject();
+                    if (bookings[i].doctorId) {
+                        bookings[i].doctor = yield user_1.Users.findUserById(bookings[i].doctorId).then((doctor) => { var _a; return (_a = doctor) === null || _a === void 0 ? void 0 : _a.toObject(); });
+                        delete bookings[i].doctor.availableTimeBlock;
+                    }
+                }
+                return { success: true, data: bookings };
+            }
+            catch (error) {
+                return { error };
+            }
         });
     }
     createNewBooking(name, description, symptom, gender, dob, address, phoneNumber, passportNumber, healthCareId, doctorId, bookingDateTimestamp, startBlockTimeIndex, endBlockTimeIndex, attachments) {

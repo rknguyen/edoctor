@@ -89,11 +89,21 @@ export class BookingCtrl {
 
   @Get('/phone/:phoneNumber')
   async findBookingByPhoneNumber(@Required() @PathParams('phoneNumber') phoneNumber: string) {
-    return BookingModel.find({ phoneNumber })
-      .then((booking: IBookingModel[] | null) =>
-        !!booking ? { data: booking } : { error: Error.BOOKING_NOT_FOUND }
-      )
-      .catch((error) => ({ error }));
+    try {
+      const bookings = await BookingModel.find({ phoneNumber });
+      for (let i = 0; i < bookings.length; ++i) {
+        bookings[i] = bookings[i].toObject();
+        if (bookings[i].doctorId) {
+          (bookings[i] as any).doctor = await Users.findUserById(bookings[i].doctorId).then((doctor) =>
+            doctor?.toObject()
+          );
+          delete (bookings[i] as any).doctor.availableTimeBlock;
+        }
+      }
+      return { success: true, data: bookings };
+    } catch (error) {
+      return { error };
+    }
   }
 
   @Post('/new')
