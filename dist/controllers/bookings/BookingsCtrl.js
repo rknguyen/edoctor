@@ -69,6 +69,13 @@ let BookingCtrl = class BookingCtrl {
                 .catch((error) => ({ error }));
         });
     }
+    findBookingByPhoneNumber(phoneNumber) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return booking_1.BookingModel.findOne({ phoneNumber })
+                .then((booking) => !!booking ? { data: booking } : { error: BookingsCtrl_Erro_1.default.BOOKING_NOT_FOUND })
+                .catch((error) => ({ error }));
+        });
+    }
     createNewBooking(name, description, symptom, gender, dob, address, phoneNumber, passportNumber, healthCareId, doctorId, bookingDateTimestamp, startBlockTimeIndex, endBlockTimeIndex) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -173,6 +180,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], BookingCtrl.prototype, "findBookingById", null);
+__decorate([
+    common_1.Get('/phone/:phoneNumber'),
+    __param(0, common_1.Required()), __param(0, common_1.PathParams('phoneNumber')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], BookingCtrl.prototype, "findBookingByPhoneNumber", null);
 __decorate([
     common_1.Post('/new'),
     __param(0, common_1.Required()), __param(0, common_1.BodyParams('name')),
