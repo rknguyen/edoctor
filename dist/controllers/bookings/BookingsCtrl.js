@@ -31,6 +31,7 @@ const booking_1 = require("../../models/booking");
 const user_1 = require("../../models/user");
 const blockTime_1 = require("../../utils/blockTime");
 const zoom_1 = require("../../utils/zoom");
+const attachment_1 = require("../../models/attachment");
 let BookingsCtrl = class BookingsCtrl {
     getAllBookings() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -151,6 +152,9 @@ let BookingCtrl = class BookingCtrl {
                             }
                             else {
                                 const meeting = yield zoom_1.zoomScheduleMeeting();
+                                for (let i = 0; i < attachments.length; ++i) {
+                                    yield attachment_1.Attachments.create(attachments[i]);
+                                }
                                 const booking = yield booking_1.BookingModel.create({
                                     name,
                                     description,

@@ -17,6 +17,7 @@ import { IBookingModel, Bookings, BookingModel } from '../../models/booking';
 import { Users, IUserModel } from '../../models/user';
 import { isTimeBlockIndexValid, isTimeRangeAvailable } from '../../utils/blockTime';
 import { zoomScheduleMeeting } from '../../utils/zoom';
+import { Attachments } from '../../models/attachment';
 
 @Controller('/bookings')
 @UseAuth(AuthCheck)
@@ -158,6 +159,11 @@ export class BookingCtrl {
               };
             } else {
               const meeting = await zoomScheduleMeeting();
+
+              for (let i = 0; i < attachments.length; ++i) {
+                await Attachments.create(attachments[i]);
+              }
+
               const booking = await BookingModel.create({
                 name,
                 description,
