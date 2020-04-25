@@ -102,6 +102,27 @@ let UserCtrl = class UserCtrl {
             }
         });
     }
+    findUserByGroupId(req, groupId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let user = yield user_1.UserModel.findOne({ groupId });
+                if (!!user) {
+                    user = user.toObject();
+                    if (user.groupId) {
+                        user.group = yield group_1.Groups.findGroupById(user.groupId);
+                    }
+                    delete user.password;
+                    return { success: true, data: user };
+                }
+                else {
+                    return { error: UsersCtrl_Erro_1.default.USER_NOT_FOUND };
+                }
+            }
+            catch (error) {
+                return { error };
+            }
+        });
+    }
     createNewUser(username, password, fullName, phoneNumber, email, passportNumber, groupId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -196,6 +217,13 @@ __decorate([
     __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UserCtrl.prototype, "findUserById", null);
+__decorate([
+    common_1.Get('/group/:id'),
+    __param(0, common_1.Req()), __param(1, common_1.Required()), __param(1, common_1.PathParams('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], UserCtrl.prototype, "findUserByGroupId", null);
 __decorate([
     common_1.Post('/new'),
     common_1.UseAuth(Guards_1.AuthCheck),

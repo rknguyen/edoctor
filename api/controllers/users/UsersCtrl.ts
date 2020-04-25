@@ -78,6 +78,25 @@ export class UserCtrl {
     }
   }
 
+  @Get('/group/:id')
+  async findUserByGroupId(@Req() req: any, @Required() @PathParams('id') groupId: string) {
+    try {
+      let user: IUserModel | null = await UserModel.findOne({ groupId });
+      if (!!user) {
+        user = user.toObject() as IUserModel;
+        if (user.groupId) {
+          (user as any).group = await Groups.findGroupById(user.groupId);
+        }
+        delete user.password;
+        return { success: true, data: user };
+      } else {
+        return { error: Error.USER_NOT_FOUND };
+      }
+    } catch (error) {
+      return { error };
+    }
+  }
+
   @Post('/new')
   @UseAuth(AuthCheck)
   async createNewUser(
