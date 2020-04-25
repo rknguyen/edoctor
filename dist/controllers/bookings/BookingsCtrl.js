@@ -107,7 +107,7 @@ let BookingCtrl = class BookingCtrl {
     }
     findBookingByPhoneNumber(phoneNumber) {
         return __awaiter(this, void 0, void 0, function* () {
-            return booking_1.BookingModel.findOne({ phoneNumber })
+            return booking_1.BookingModel.find({ phoneNumber })
                 .then((booking) => !!booking ? { data: booking } : { error: BookingsCtrl_Erro_1.default.BOOKING_NOT_FOUND })
                 .catch((error) => ({ error }));
         });

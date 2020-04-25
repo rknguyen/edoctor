@@ -89,8 +89,8 @@ export class BookingCtrl {
 
   @Get('/phone/:phoneNumber')
   async findBookingByPhoneNumber(@Required() @PathParams('phoneNumber') phoneNumber: string) {
-    return BookingModel.findOne({ phoneNumber })
-      .then((booking: IBookingModel | null) =>
+    return BookingModel.find({ phoneNumber })
+      .then((booking: IBookingModel[] | null) =>
         !!booking ? { data: booking } : { error: Error.BOOKING_NOT_FOUND }
       )
       .catch((error) => ({ error }));
