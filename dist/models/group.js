@@ -13,6 +13,10 @@ const GroupSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    description: {
+        type: String,
+        required: false,
+    },
     createdAt: {
         type: Number,
         required: false,
@@ -36,7 +40,7 @@ exports.GroupModel = mongoose.model('group', GroupSchema, 'groups');
 exports.Groups = {
     getAllGroups: () => exports.GroupModel.find({}).sort({ createdAt: 'desc' }),
     findGroupById: (id) => exports.GroupModel.findById(id),
-    create: (name) => exports.GroupModel.create({ name }),
+    create: (name, description) => exports.GroupModel.create({ name, description }),
     updateNameById: (id, name) => exports.GroupModel.findByIdAndUpdate(id, { name }),
     deleteById: (id) => exports.GroupModel.findByIdAndDelete(id),
 };

@@ -56,9 +56,9 @@ let GroupCtrl = class GroupCtrl {
                 .catch((error) => ({ error }));
         });
     }
-    createNewGroup(name) {
+    createNewGroup(name, description) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield group_1.Groups.create(name)
+            return yield group_1.Groups.create(name, description)
                 .then((group) => ({ success: true, data: group }))
                 .catch((error) => ({ error }));
         });
@@ -66,6 +66,13 @@ let GroupCtrl = class GroupCtrl {
     updateGroupName(id, name) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield group_1.Groups.updateNameById(id, name)
+                .then(() => ({ success: true }))
+                .catch((error) => ({ error }));
+        });
+    }
+    updateGroupDescription(id, description) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield group_1.GroupModel.findByIdAndUpdate(id, { description })
                 .then(() => ({ success: true }))
                 .catch((error) => ({ error }));
         });
@@ -88,8 +95,9 @@ __decorate([
 __decorate([
     common_1.Post('/new'),
     __param(0, common_1.Required()), __param(0, common_1.BodyParams('name')),
+    __param(1, common_1.Required()), __param(1, common_1.BodyParams('description')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], GroupCtrl.prototype, "createNewGroup", null);
 __decorate([
@@ -100,6 +108,14 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], GroupCtrl.prototype, "updateGroupName", null);
+__decorate([
+    common_1.Patch('/:id/description'),
+    __param(0, common_1.Required()), __param(0, common_1.PathParams('id')),
+    __param(1, common_1.Required()), __param(1, common_1.BodyParams('description')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], GroupCtrl.prototype, "updateGroupDescription", null);
 __decorate([
     common_1.Delete('/:id'),
     __param(0, common_1.Required()), __param(0, common_1.PathParams('id')),

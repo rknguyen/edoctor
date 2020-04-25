@@ -11,7 +11,7 @@ import {
   Delete,
 } from '@tsed/common';
 import { AuthCheck } from '../../middlewares/Guards';
-import { Groups, IGroupModel } from '../../models/group';
+import { Groups, IGroupModel, GroupModel } from '../../models/group';
 import Error from './GroupsCtrl.Erro';
 
 @Controller('/groups')
@@ -39,8 +39,11 @@ export class GroupCtrl {
   }
 
   @Post('/new')
-  async createNewGroup(@Required() @BodyParams('name') name: string) {
-    return await Groups.create(name)
+  async createNewGroup(
+    @Required() @BodyParams('name') name: string,
+    @Required() @BodyParams('description') description: string
+  ) {
+    return await Groups.create(name, description)
       .then((group) => ({ success: true, data: group }))
       .catch((error) => ({ error }));
   }
@@ -51,6 +54,16 @@ export class GroupCtrl {
     @Required() @BodyParams('name') name: string
   ) {
     return await Groups.updateNameById(id, name)
+      .then(() => ({ success: true }))
+      .catch((error) => ({ error }));
+  }
+
+  @Patch('/:id/description')
+  async updateGroupDescription(
+    @Required() @PathParams('id') id: string,
+    @Required() @BodyParams('description') description: string
+  ) {
+    return await GroupModel.findByIdAndUpdate(id, { description })
       .then(() => ({ success: true }))
       .catch((error) => ({ error }));
   }

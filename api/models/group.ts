@@ -6,6 +6,7 @@ import * as mongoose from 'mongoose';
 
 export interface IGroupModel extends mongoose.Document {
   name: string;
+  description: string;
   createdAt: number;
   modifiedAt: number;
 }
@@ -14,6 +15,10 @@ const GroupSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+  },
+  description: {
+    type: String,
+    required: false,
   },
   createdAt: {
     type: Number,
@@ -49,7 +54,8 @@ export const GroupModel = mongoose.model<IGroupModel>('group', GroupSchema, 'gro
 export const Groups = {
   getAllGroups: (): IGroupsQuery => GroupModel.find({}).sort({ createdAt: 'desc' }),
   findGroupById: (id: string): IGroupQuery => GroupModel.findById(id),
-  create: (name: string): Promise<IGroupModel> => GroupModel.create({ name }),
+  create: (name: string, description: string): Promise<IGroupModel> =>
+    GroupModel.create({ name, description }),
   updateNameById: (id: string, name: string): IGroupQuery => GroupModel.findByIdAndUpdate(id, { name }),
   deleteById: (id: string): IGroupQuery => GroupModel.findByIdAndDelete(id),
 };
