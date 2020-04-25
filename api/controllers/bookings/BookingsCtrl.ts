@@ -24,9 +24,21 @@ import { zoomScheduleMeeting } from '../../utils/zoom';
 export class BookingsCtrl {
   @Get('/')
   async getAllBookings() {
-    return await Bookings.getAllBookings()
-      .then((bookings) => ({ success: true, data: bookings }))
-      .catch((error) => ({ error }));
+    try {
+      const bookings = await Bookings.getAllBookings();
+      for (let i = 0; i < bookings.length; ++i) {
+        bookings[i] = bookings[i].toObject();
+        if (bookings[i].doctorId) {
+          (bookings[i] as any).doctor = await Users.findUserById(bookings[i].doctorId).then((doctor) =>
+            doctor?.toObject()
+          );
+          delete (bookings[i] as any).doctor.availableTimeBlock;
+        }
+      }
+      return { success: true, data: bookings };
+    } catch (error) {
+      return { error };
+    }
   }
 }
 
@@ -36,20 +48,42 @@ export class BookingCtrl {
   @Get('/me')
   @UseAuth(AuthCheck)
   async findBookingIdByUser(@Req() request: any) {
-    return BookingModel.find({ doctorId: request.user.id })
-      .then((bookings: any) => ({
-        data: bookings,
-      }))
-      .catch((error) => ({ error }));
+    try {
+      const bookings = await BookingModel.find({ doctorId: request.user.id });
+      for (let i = 0; i < bookings.length; ++i) {
+        bookings[i] = bookings[i].toObject();
+        if (bookings[i].doctorId) {
+          (bookings[i] as any).doctor = await Users.findUserById(bookings[i].doctorId).then((doctor) =>
+            doctor?.toObject()
+          );
+          delete (bookings[i] as any).doctor.availableTimeBlock;
+        }
+      }
+      return { success: true, data: bookings };
+    } catch (error) {
+      return { error };
+    }
   }
 
   @Get('/:id')
   async findBookingById(@Required() @PathParams('id') id: string) {
-    return Bookings.findBookingById(id)
-      .then((booking: IBookingModel | null) =>
-        !!booking ? { data: booking } : { error: Error.BOOKING_NOT_FOUND }
-      )
-      .catch((error) => ({ error }));
+    try {
+      let booking: any = await Bookings.findBookingById(id);
+      if (!!booking) {
+        booking = booking.toObject() as IUserModel;
+        if (booking?.doctorId) {
+          (booking as any).doctor = await Users.findUserById(booking.doctorId).then((doctor) =>
+            doctor?.toObject()
+          );
+          delete (booking as any).doctor.availableTimeBlock;
+        }
+        return { success: true, data: booking };
+      } else {
+        return { error: Error.BOOKING_NOT_FOUND };
+      }
+    } catch (error) {
+      return { error };
+    }
   }
 
   @Get('/phone/:phoneNumber')

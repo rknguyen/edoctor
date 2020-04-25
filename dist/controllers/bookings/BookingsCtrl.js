@@ -34,9 +34,20 @@ const zoom_1 = require("../../utils/zoom");
 let BookingsCtrl = class BookingsCtrl {
     getAllBookings() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield booking_1.Bookings.getAllBookings()
-                .then((bookings) => ({ success: true, data: bookings }))
-                .catch((error) => ({ error }));
+            try {
+                const bookings = yield booking_1.Bookings.getAllBookings();
+                for (let i = 0; i < bookings.length; ++i) {
+                    bookings[i] = bookings[i].toObject();
+                    if (bookings[i].doctorId) {
+                        bookings[i].doctor = yield user_1.Users.findUserById(bookings[i].doctorId).then((doctor) => { var _a; return (_a = doctor) === null || _a === void 0 ? void 0 : _a.toObject(); });
+                        delete bookings[i].doctor.availableTimeBlock;
+                    }
+                }
+                return { success: true, data: bookings };
+            }
+            catch (error) {
+                return { error };
+            }
         });
     }
 };
@@ -55,18 +66,42 @@ exports.BookingsCtrl = BookingsCtrl;
 let BookingCtrl = class BookingCtrl {
     findBookingIdByUser(request) {
         return __awaiter(this, void 0, void 0, function* () {
-            return booking_1.BookingModel.find({ doctorId: request.user.id })
-                .then((bookings) => ({
-                data: bookings,
-            }))
-                .catch((error) => ({ error }));
+            try {
+                const bookings = yield booking_1.BookingModel.find({ doctorId: request.user.id });
+                for (let i = 0; i < bookings.length; ++i) {
+                    bookings[i] = bookings[i].toObject();
+                    if (bookings[i].doctorId) {
+                        bookings[i].doctor = yield user_1.Users.findUserById(bookings[i].doctorId).then((doctor) => { var _a; return (_a = doctor) === null || _a === void 0 ? void 0 : _a.toObject(); });
+                        delete bookings[i].doctor.availableTimeBlock;
+                    }
+                }
+                return { success: true, data: bookings };
+            }
+            catch (error) {
+                return { error };
+            }
         });
     }
     findBookingById(id) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            return booking_1.Bookings.findBookingById(id)
-                .then((booking) => !!booking ? { data: booking } : { error: BookingsCtrl_Erro_1.default.BOOKING_NOT_FOUND })
-                .catch((error) => ({ error }));
+            try {
+                let booking = yield booking_1.Bookings.findBookingById(id);
+                if (!!booking) {
+                    booking = booking.toObject();
+                    if ((_a = booking) === null || _a === void 0 ? void 0 : _a.doctorId) {
+                        booking.doctor = yield user_1.Users.findUserById(booking.doctorId).then((doctor) => { var _a; return (_a = doctor) === null || _a === void 0 ? void 0 : _a.toObject(); });
+                        delete booking.doctor.availableTimeBlock;
+                    }
+                    return { success: true, data: booking };
+                }
+                else {
+                    return { error: BookingsCtrl_Erro_1.default.BOOKING_NOT_FOUND };
+                }
+            }
+            catch (error) {
+                return { error };
+            }
         });
     }
     findBookingByPhoneNumber(phoneNumber) {
